@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Products
+{% endblock %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container container-fluid p-5 mt-4">
+    <table class="table table-bordered border-primary">
+        <form action="{% url 'addproduct' %}" method="post">
+            {% csrf_token %}
+            {{ productform.as_table }}
+            <tr>
+                <td colspan="2">
+                    <input type="submit" class="btn btn-primary" value="Save">
+                </td>
+        </form>
+        </tr>
+    </table>
+</div>
+<div
+    class="container container-fluid w-25 text-center fw-bold mt-3 alert alert-success alert-dismissible fade show mx-auto" role="alert">
+    {% if messages %}
+    {% for messagee in messages %}
+    <p class="{% if message.tags %}{{ messagee.tags }}{% endif %} text-success">{{ messagee }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+
+</div>
+{% endfor %}
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Products
+{% endblock %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container container-fluid mt-3">
+    <h2 class="text-center fw-bold text-primary mb-3">Products</h2>
+    <h4 class="text-center fw-bold text-secondary">Available Products</h4>
+    <table class="table table-striped table-hover table-bordered border-primary table-striped-columns">
+        <thead>
+            <tr>
+                <th>Prod Id</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for item in product %}
+                <td>
+                    {{ item.id }}
+                </td>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ item.category }}
+                </td>
+                <td>
+                    {{ item.quantity }}
+                </td>
+                <td>
+                    {{ item.price }}
+                </td>
+                <td class="mx-auto"><a href="{% url 'editproduct' item.id %}"><i
+                            class="bi bi-pencil-square text-success"></i></a>
+
+                    <a href="{% url 'deleteproduct' item.id %}"><i class="bi bi-trash text-danger"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+
+            <tr class="{{ show_message }} text-center fw-bold">
+                <td colspan="6" class="text-danger">{{ message }}</td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+{% endblock %}

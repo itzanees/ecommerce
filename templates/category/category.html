@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Category
+{% endblock %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="container container-fluid mt-3">
+    <h2 class="text-center fw-bold text-primary mb-3">Categories</h2>
+    <h4 class="text-center fw-bold text-secondary">Available Categories</h4>
+    <div class="container container-fluid d-flex justify-content-center my-4">
+        <table class="table table-striped table-hover table-bordered w-50">
+            <thead>
+                <tr>
+                    <th>Category Code</th>
+                    <th>Category Name</th>
+                    <th>Edit/Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for items in savedCategory %}
+                <tr>
+                    <td>{{ items.cat_code }}</td>
+                    <td>{{ items.name }}</td>
+                    <td><a href="{% url 'editcategory' items.cat_code %}"><i class="bi bi-pencil-square text-success"></i></a>
+
+                        <a href="{% url 'deletecategory' items.cat_code %}"><i class="bi bi-trash text-danger"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show w-50 mx-auto" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<div class="container container-fluid text-center">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        New Category
+    </button>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Create a category</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="savecategory" method="post">
+                    {% csrf_token %}
+                    <div class="container mb-3">
+                        <table class="table-center">
+                            <tr>
+                                <th class="pr-3"> Category Code</th>
+                                <th class="mr-3"> {{ categoryform.cat_code }}</th>
+                            </tr>
+                            <tr>
+                                <th class="mr-3"> Category Name</th>
+                                <th class="mr-3"> {{ categoryform.name }}</th>
+                            </tr>
+                        </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input type="submit" value="Save" class="btn btn-primary w-25 fw-bold my-1">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

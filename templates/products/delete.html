@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Delete Product
+{% endblock %}
+
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="container container-fluid w-50 mt-5 bg-warning-subtle p-5 rounded-5 shadow">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-10 mt-4">Delete Product {{ item }}</h1>
+            </div>
+            <div class="modal-body fs-5 mt-4">
+                Are you sure you want to delete "{{ item }}"?
+            </div>
+            <div class="modal-footer mt-5">
+                <form method="post">
+                    {% csrf_token %}
+                    <a href="{% url 'category' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
