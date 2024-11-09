@@ -3,7 +3,14 @@ from . forms import CategoryForm, ProductForm
 from . models import Category, Product
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import User
+
 # Create your views here.
+
+@login_required
 def home(req):
     return render(req, 'index.html')
 
@@ -112,3 +119,67 @@ def deleteProduct(req, prodId):
         return redirect('products')
     
     return render (req, 'products/delete.html', {'item' : itemDelete.name})
+
+
+# AUTHENTICATION
+
+def loginview(request):
+    uname = request.POST['username']
+    pwd = request.POST['password']
+    user = authenticate(request, username=uname, password=pwd)
+    if user is not None:
+        login(request, user)
+        return redirect('home')
+    else:
+        return render(request,"registration/login.html",{"msg":"Invalid login"})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+
+
+def signup(request):
+    try:
+        form = UserCreationForm(request.POST)
+        if request.method == "POST":
+            if form.is_valid():   
+                form.save() 
+                return redirect('login')  
+            return render(request, 'registration/signup.html', {'form': userform,'msg':'Invalid login'})
+                         
+        else:
+            form=UserCreationForm()
+            return render(request, 'registration/signup.html', {'form': userform,'msg':'Invalid submission'})
+    except Exception as e:
+            print(e)
+            userform = UserCreationForm()
+            return render(request, 'registration/signup.html', {'form': userform})
+    
+
+
+def passwordreset(request):
+    if request.method == "POST":
+        uname = request.POST['username']
+        newpwd1=request.POST['password1']
+        newpwd2=request.POST['password2']
+        try:
+            if newpwd1 == newpwd2:
+                user=User.objects.get(username=uname)
+                if user is not None:
+                    user.set_password(newpwd1)
+                    user.save()
+                return render(request,"registration/ResetPassword.html",{"msg":"Password Reset Successfully"})
+            else:
+                return render(request,"registration/ResetPassword.html",{"msg":"Passwords do not match"})
+        except Exception as e:
+            print(e)
+            return render(request,"registration/ResetPassword.html",{"msg":"Password Reset Failed"})
+    return render(request,'registration/ResetPassword.html')
+
+# def resetPassword(request):
+    
+   
+        
+    
+    
