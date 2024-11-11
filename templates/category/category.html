@@ -25,7 +25,8 @@ Category
                 <tr>
                     <td>{{ items.cat_code }}</td>
                     <td>{{ items.name }}</td>
-                    <td><a href="{% url 'editcategory' items.cat_code %}"><i class="bi bi-pencil-square text-success"></i></a>
+                    <td><a href="{% url 'editcategory' items.cat_code %}"><i
+                                class="bi bi-pencil-square text-success"></i></a>
 
                         <a href="{% url 'deletecategory' items.cat_code %}"><i class="bi bi-trash text-danger"></i></a>
                     </td>
@@ -74,13 +75,15 @@ Category
                                 <th class="mr-3"> {{ categoryform.name }}</th>
                             </tr>
                         </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <input type="submit" value="Save" class="btn btn-primary w-25 fw-bold my-1">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" value="Save" class="btn btn-primary w-25 fw-bold my-1">
                 </form>
             </div>
         </div>
     </div>
+</div>
 
-    {% endblock %}
+
+{% endblock %}

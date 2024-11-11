@@ -11,26 +11,26 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 @login_required
-def home(req):
-    return render(req, 'index.html')
+def home(request):
+    return render(request, 'index.html')
 
 # category section
-def category(req):
+def category(request):
         categoryform = CategoryForm()
         savedCategory = Category.objects.all()
         if len(savedCategory)<1:
             error = 'Nothing in the list, create new'
-            return render(req, 'category/category.html', {'categoryform': categoryform, 'savedCategory': savedCategory, 'error':error})
-        return render(req, 'category/category.html', {'categoryform': categoryform, 'savedCategory': savedCategory})
+            return render(request, 'category/category.html', {'categoryform': categoryform, 'savedCategory': savedCategory, 'error':error})
+        return render(request, 'category/category.html', {'categoryform': categoryform, 'savedCategory': savedCategory})
 
-def savecategory(req):
+def savecategory(request):
     try:
-        if req.method == 'POST':
-            categoryForm = CategoryForm(req.POST)
+        if request.method == 'POST':
+            categoryForm = CategoryForm(request.POST)
             if categoryForm.is_valid():
                 categoryForm.save()
                 message = "Category added."
-                messages.success(req, message)
+                messages.success(request, message)
                 return redirect('category')
             else:
                 categoryForm = CategoryForm()
@@ -40,85 +40,85 @@ def savecategory(req):
     except Exception as e:
         print("Error ", e)
 
-def editcategory(req, ccode):
+def editcategory(request, ccode):
     catToEdit = Category.objects.filter(cat_code=ccode)
     try:
-        if req.method =="POST":
-            newcatcode = req.POST['new_cat_code']
-            newname  = req.POST['new_name']
+        if request.method =="POST":
+            newcatcode = request.POST['new_cat_code']
+            newname  = request.POST['new_name']
             if catToEdit.exists():
                 message = "Category updated successfully."
-                messages.success(req, message)
+                messages.success(request, message)
                 catToEdit.update(cat_code = newcatcode, name = newname)
                 return redirect('category')
         else:
             oldCat = Category.objects.get(cat_code = ccode)
             cat_name = oldCat.name
-            return render(req, 'category/edit.html', {'catcode':ccode, 'old_name':cat_name})
+            return render(request, 'category/edit.html', {'catcode':ccode, 'old_name':cat_name})
     except Exception as e:
         print (e)
 
-def deletecategory(req, ccode):
+def deletecategory(request, ccode):
     catToDelete = Category.objects.get(cat_code=ccode)
-    if req.method == "POST":
+    if request.method == "POST":
         catToDelete.delete()
         message = "Category deleted successfully"
-        messages.success(req, message)
+        messages.success(request, message)
         return redirect('category')
-    return render(req, 'category/delete.html', {'delete' :catToDelete})
+    return render(request, 'category/delete.html', {'delete' :catToDelete})
 
 # products section
-def product(req):
+def product(request):
     # category = Category().objects.all()
     product = Product.objects.all()
     if len(product) <1 :
         message = 'No items in the list'
         show_message = ''
-        return render(req, 'products/products.html', {'products': product, 'message' : message} )
+        return render(request, 'products/products.html', {'products': product, 'message' : message} )
     show_message = 'd-none'
-    return render(req, 'products/products.html', {'product': product, 'show_message':show_message} )
+    return render(request, 'products/products.html', {'product': product, 'show_message':show_message} )
 
-def addProduct(req):
-    if req.method == "POST":
-        productForm = ProductForm(req.POST)
+def addProduct(request):
+    if request.method == "POST":
+        productForm = ProductForm(request.POST)
         if productForm.is_valid():
             productForm.save()
-            messages.success(req, "Product saved")
+            messages.success(request, "Product saved")
             return redirect('addproduct')
         else:
-            messages.error(req, "Product not saved")
-            return render(req, 'products/add.html', {'productform':productForm})
+            messages.error(request, "Product not saved")
+            return render(request, 'products/add.html', {'productform':productForm})
     productform = ProductForm()
-    return render(req, 'products/add.html', {'productform':productform})
+    return render(request, 'products/add.html', {'productform':productform})
 
-def editProduct(req, prodId):
+def editProduct(request, prodId):
     itemEdit = Product.objects.filter(id=prodId)
     try:
-        if req.method == 'POST':
-            name = req.POST['name']
-            category  = req.POST['category']
-            quantity = req.POST['quantity']
-            price = req.POST['price']
+        if request.method == 'POST':
+            name = request.POST['name']
+            category  = request.POST['category']
+            quantity = request.POST['quantity']
+            price = request.POST['price']
             if itemEdit.exists():
-                messages.success(req, "Product edited.")
+                messages.success(request, "Product edited.")
                 itemEdit.update(name = name, category= category, quantity =quantity, price = price)
                 return redirect('products')
         else:
             form = ProductForm()
-            return render(req, 'products/edit.html', {'form': form , 'values': itemEdit})
+            return render(request, 'products/edit.html', {'form': form , 'values': itemEdit})
     except Exception as e:
         print(e)
 
 
-def deleteProduct(req, prodId):
+def deleteProduct(request, prodId):
     itemDelete = Product.objects.get(id=prodId)
-    if req.method == "POST":
+    if request.method == "POST":
         itemDelete.delete()
         message = f'{itemDelete.name} Deleted Successfully'
-        messages.success(req, message)
+        messages.success(request, message)
         return redirect('products')
     
-    return render (req, 'products/delete.html', {'item' : itemDelete.name})
+    return render (request, 'products/delete.html', {'item' : itemDelete.name})
 
 
 # AUTHENTICATION
@@ -141,20 +141,19 @@ def logout_view(request):
 
 def signup(request):
     try:
-        form = UserCreationForm(request.POST)
         if request.method == "POST":
+            xform = UserCreationForm(request.POST)
             if form.is_valid():   
                 form.save() 
                 return redirect('login')  
-            return render(request, 'registration/signup.html', {'form': userform,'msg':'Invalid login'})
-                         
+            return render(request, 'registration/signup.html', {'form': form,'msg':'Invalid details'})       
         else:
             form=UserCreationForm()
-            return render(request, 'registration/signup.html', {'form': userform,'msg':'Invalid submission'})
+            return render(request, 'registration/signup.html', {'form': form})
     except Exception as e:
             print(e)
             userform = UserCreationForm()
-            return render(request, 'registration/signup.html', {'form': userform})
+            return render(request, 'registration/signup.html', {'form': form})
     
 
 
@@ -176,10 +175,3 @@ def passwordreset(request):
             print(e)
             return render(request,"registration/ResetPassword.html",{"msg":"Password Reset Failed"})
     return render(request,'registration/ResetPassword.html')
-
-# def resetPassword(request):
-    
-   
-        
-    
-    

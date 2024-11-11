@@ -22,15 +22,42 @@ Products
         </tr>
     </table>
 </div>
-<div
-    class="container container-fluid w-25 text-center fw-bold mt-3 alert alert-success alert-dismissible fade show mx-auto" role="alert">
+<!-- <div class="container container-fluid text-center fw-bold mt-3 p-2 alert alert-success alert-dismissible fade show mx-auto" role="alert"> -->
     {% if messages %}
     {% for messagee in messages %}
-    <p class="{% if message.tags %}{{ messagee.tags }}{% endif %} text-success">{{ messagee }}</p>
+    <!-- <p class="text-white">{{ messagee }}</p>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div> -->
 
 
+<div class="container container-fluid text-center">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Product Added
+    </button>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Product Added</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-white">{{ messagee }}</p>
+                <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 {% endfor %}
 {% endif %}
 </div>
